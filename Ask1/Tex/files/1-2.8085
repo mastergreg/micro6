@@ -1,26 +1,22 @@
-;LED moves left-> right and right->left if
-;MSB of DIP Switches is on, otherwise it 
-;Cycles to the left
-
 START:
     MVI A,FEH   ;1111 1110
-    LXI B,01F4H ;500ms delay
+    LXI B,01F4H ;500ms
 LOOP_L:
     STA 3000H   ;LED on
     CALL DELB
-    MOV C,A     ;Keep status of LEDS
+    MOV C,A     ;Save status
     RLC
-    JNC CHECK   ;If at leftmost LED, check DIPs
-    JMP LOOP_L  ;Else, repeat
+    JNC CHECK   ;if at left check DIPs
+    JMP LOOP_L  ;else, loop
 CHECK:  
     LDA 2000H
-    RRC         ;If LSB of DIPs = 0
-    JNC START   ;Cycle to first LED
-    MOV A,C     ;Else start moving right
+    RRC         ;If LSB == 0
+    JNC START   ;Cycle
+    MOV A,C     ;else move right
     RRC
 LOOP_R: 
-    STA 3000H   ;LED on
-    CALL DELB
+    STA 3000H   ;store to led
+    CALL DELB   ;wait a bit
     RRC
     JNC RESTART ;If at rightmost LED, go left
     JMP LOOP_R  ;Else, repeat
