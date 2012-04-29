@@ -1,0 +1,19 @@
+START:  
+    MVI B,01H       ;06 00
+    LDA 2000H       ;3A 00 20
+    CPI 00H         ;FE 00
+    JZ 13           ;CA 13 08
+
+L0A:
+    RAR             ;1F
+    JC 12           ;DA 12 08
+    INR B           ;04
+    JNZ 0A          ;C2 0A 08
+L12: 
+    MOV A,B         ;78
+L13:
+    CMA             ;2F
+    STA 3000H       ;32 00 30
+    RST 1           ;CF
+    ;JMP START
+    END

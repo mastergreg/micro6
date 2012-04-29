@@ -1,0 +1,36 @@
+START:
+    LDA 2000H   ;eisodos apo diakoptes
+    MOV B,A     ;B=A
+    MVI D,00H   ;D=0
+    RRC         ;Olis8hsh de3ia wste na er8oun ta Ai sth 8esh twn Bi kai to antistrofo
+    ANA B       ;A and B gia to C0=A0^B0 kai to endiameso apotelesma Y1=A4^B4
+    ANI 41H     ;kratame mono ta shmantika apotelesmata - sto 1o kai to 7o lsb
+    MOV D,A     ;D= 0 Y1 0 0  0 0 0 C0
+    RRC
+    RRC
+    RRC         ;metakinoume to Y1 sth swsth 8esh (4o lsb) dhl A= 0 0 C0 0 Y1 0 0 0
+    ORA D
+    MOV D,A     ;D= 0 Y1 0 C0  Y1 0 0 C0
+    MOV A,B     ;epanafora A gia tis upoloipes pra3eis
+    RRC
+    XRA B       ;A xor B gia to endiameso apotelesma Y0=A2 xor B2 (C2=Y0)
+    ANI 10H     ;kratame mono to 5o lsb
+    RRC         ;to metakinoume sth swsth 8esh (4o lsb)
+    MOV C,A     ;apo8hkeuoume to Y0 giati 8a to 3anaxreiastoume
+    ORA D       ; A = 0 Y1 0 C0  C3 0 0 C0 opou     C3=Y1 or Y0
+    MOV D,A     ; D=A
+    MOV A,C     ; A = 0 0 0 0 Y0 0 0 0
+    RRC         ;to metakinoume sto 3o lsb
+    ORA D       ; A = 0 Y1 0 C0 C3 C2 0 C0
+    MOV D,A     ;D=A
+    MOV A,B
+    RRC
+    ORA B       ;A or B gia to C1=A1 or B1
+    ANI 04H     ;kratame mono to 3o lsb
+    RRC         ;to metakinoume sth swsth 8esh (2o lsb)
+    ORA D       ; A = 0 Y1 0 C0  C3 C2 C1 C0
+    ANI 0FH     ; A = 0  0 0  0  C3 C2 C1 C0
+    CMA         ;antistrofh gia e3odo
+    STA 3000H
+    JMP START
+END

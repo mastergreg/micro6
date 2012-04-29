@@ -1,0 +1,31 @@
+;Convert 8-bit binary from DIP switches
+;into its decimal value (modulo 100)
+;Display decades on 4 MSB and units on 4LSB
+
+START:
+	LDA 2000H	;Read from dips
+	MVI B,00H
+
+HUN:
+	SUI 64H	;Subtract 100 until
+	JNC HUN	;Number is < 0
+	ADI 64H	;Add 100
+DEC:
+	INR B		;Count tens
+	SUI 0AH	;Subtract 10
+	JNC DEC	;Repeat
+	ADI 0AH	;Add 10
+	DCR B
+
+	MOV C,A	;Keep units on C
+	MOV A,B	;Get decades
+	RLC		;4 shifts to
+	RLC		;Reach correct position
+	RLC		;For LEDs
+	RLC
+	ADD C		;Add units
+
+	CMA		;Complement A
+	STA 3000H	;Show on LEDs
+	JMP START
+END
